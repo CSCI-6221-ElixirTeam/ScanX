@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scan Results</title>
+  <style>
+    :root {
+      --main-green: #00ff9d;
+      --dim-green: #0d7f46;
+      --text-green: #19a367;
+      --bg-dark: #0d1117;
+    }
+
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(26, 255, 141, 0.03) 0%, transparent 100%),
+        linear-gradient(135deg, rgba(13, 17, 23, 0.95) 0%, rgba(0, 0, 0, 0.95) 100%);
+      color: #e0e0e0;
+      position: relative;
+      overflow: hidden;
+    }1
+
+    /* Matrix-like background animation */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, transparent 0%, rgba(0, 0, 0, 0.9) 100%),
+                  url('data:image/svg+xml,%3Csvg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"%3E%3Ctext x="50%25" y="50%25" font-family="monospace" font-size="14" fill="rgba(26, 255, 141, 0.05)" text-anchor="middle"%3E01%3C/text%3E%3C/svg%3E');
+      opacity: 0.3;
+      z-index: -1;
+      animation: matrix 20s linear infinite;
+    }
+
+    @keyframes matrix {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 1000px; }
+    }
+
+    /* Left Navbar */
+    .navbar {
+      width: 250px;
+      background: rgba(13, 17, 23, 0.95);
+      border-right: 1px solid rgba(0, 255, 157, 0.2);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      height: 100vh;
+      left: 0;
+      top: 0;
+    }
+
+    .navbar-title {
+      color: var(--main-green);
+      font-size: 24px;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+
+    .navbar-version {
+      color: var(--dim-green);
+      font-size: 12px;
+      margin-bottom: 30px;
+    }
+
+    .team-members {
+      color: var(--text-green);
+      font-size: 14px;
+      margin-bottom: auto;
+    }
+
+    .team-members div {
+      margin-bottom: 10px;
+      opacity: 0.8;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 250px;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(13, 17, 23, 0.95);
+      border-radius: 12px;
+      padding: 30px;
+      width: 500%;
+      position: relative;
+      display: flex;
+      margin-left: 20rem;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 30px;
+      color: var(--main-green);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      position: relative;
+      text-align: center;
+    }
+
+    .results-container {
+      background-color: rgba(13, 17, 23, 0.9);
+      border: 1px solid rgba(0, 255, 157, 0.2);
+      border-radius: 8px;
+      width: 100%;
+      max-height: 500px;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .results-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .results-container::-webkit-scrollbar-track {
+      background: rgba(0, 255, 157, 0.05);
+    }
+
+    .results-container::-webkit-scrollbar-thumb {
+      background: var(--dim-green);
+      border-radius: 4px;
+    }
+
+    .results-container::-webkit-scrollbar-thumb:hover {
+      background: var(--main-green);
+    }
+
+    
+      pre {
+      margin: 0;
+      padding: 20px;
+      color: #e0e0e0; /* Set default text color to white */
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .json-text-before {
+      color: var(--main-green);
+    }
+
+    .terminal-header {
+      height: 25px;
+      background: rgba(0, 255, 157, 0.1);
+      border-bottom: 1px solid rgba(0, 255, 157, 0.2);
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+    }
+
+    .terminal-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .terminal-button {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(0, 255, 157, 0.3);
+    }
+
+    .btn-container {
+      margin-top: 30px;
+    }
+
+    button {
+      background: transparent;
+      color: var(--main-green);
+      border: 1px solid var(--main-green);
+      border-radius: 6px;
+      padding: 12px 30px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button:hover {
+      background: rgba(0, 255, 157, 0.1);
+      box-shadow: 0 0 15px rgba(0, 255, 157, 0.2);
+    }
+
+    /* Get Started button at bottom of navbar */
+    .nav-bottom {
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid rgba(0, 255, 157, 0.2);
+    }
+
+    .get-started {
+      color: var(--text-green);
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      display: block;
+      text-align: center;
+    }
+
+    .get-started:hover {
+      background: rgba(0, 255, 157, 0.1);
+    }
+
+    #json-display .json-value,
+    #json-display .json-key {
+      color: #e0e0e0 !important; /* Force white color for both */
+    }
+
+    #json-display .json-text-before {
+      color: var(--main-green) !important; /* Force green color for text before colon */
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Left Navbar -->
+  <nav class="navbar">
+    <a href="/" class="navbar-title" style="text-decoration: none; cursor: pointer;">SCANX</a>
+    <div class="navbar-version">v0.1</div>
+    
+    <div class="team-members">
+      <div>Aishwarya Sajjan (G42225084)</div>
+      <div>Ilakkiya Vijayakumar (G22666979)</div>
+      <div>Jashwanth Dongala (G26430528)</div>
+      <div>Priyesh EM (G20542521)</div>
+      <div>Sribalaji Annamalai Senthilkumar (G44627522)</div>
+    </div>
+
+    <div class="nav-bottom">
+      <a href="#" class="get-started">Get Started →</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="container">
+      <h1>Scan Results</h1>
+      <div class="results-container">
+        <div class="terminal-header">
+          <div class="terminal-buttons">
+            <div class="terminal-button"></div>
+            <div class="terminal-button"></div>
+            <div class="terminal-button"></div>
+          </div>
+        </div>
+        <pre><%= Jason.encode!(@result, pretty: true) %></pre>
+      </div>
+      <div class="btn-container">
+        <button onclick="window.location.href='/';">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h18M3 12l6-6M3 12l6 6"/>
+          </svg>
+          New Scan
+        </button>
+      </div>
+    </div>
+  </div>
+ <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const pre = document.getElementById('json-display');
+      const content = pre.textContent;
+
+      try {
+        const jsonData = JSON.parse(content);
+        
+        // Format the JSON with coloring only before the colon
+        const formattedContent = JSON.stringify(jsonData, null, 2)
+          .replace(/(".*?"(?=:))/g, '<span class="json-text-before">$1</span>');
+
+        pre.innerHTML = formattedContent;
+      } catch (e) {
+        console.error('Error parsing JSON:', e);
+      }
+    });
+  </script>
+</body>
+</html>

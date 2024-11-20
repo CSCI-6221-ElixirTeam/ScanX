@@ -1,0 +1,47 @@
+<div class="flex min-h-screen">
+  <!-- Left Side Header/Navigation -->
+  <header class="w-64 border-r border-zinc-100 min-h-screen fixed">
+    <div class="flex flex-col h-full p-4">
+      <!-- ScanX Title and Version at the top -->
+      <div class="flex flex-col items-center mb-8">
+        <div class="flex items-center gap-4">
+          <h1 class="text-2xl font-bold text-brand bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent" style="font-family: 'Orbitron', sans-serif;">
+            ScanX
+          </h1>
+          <p class="bg-brand/5 text-brand rounded-full px-2 font-medium leading-6">
+            v<%= Application.spec(:phoenix, :vsn) %>
+          </p>
+        </div>
+      </div>
+
+      <!-- Team section with spacer to push content apart -->
+      <div class="flex-1 flex flex-col">
+        <div class="text-zinc-900 font-semibold mb-4 text-left">
+            Team Elixir
+        </div>
+        <div class="flex flex-col space-y-4 flex-1">
+            <div class="text-sm text-zinc-600 text-left">Aishwarya Sajjan (G42225084)</div>
+            <div class="text-sm text-zinc-600 text-left">Ilakkiya Vijayakumar (G22666979)</div>
+            <div class="text-sm text-zinc-600 text-left">Jashwanth Dongala (G26430528)</div>
+            <div class="text-sm text-zinc-600 text-left">Priyesh EM (G20542521)</div>
+            <div class="text-sm text-zinc-600 text-left">Sribalaji Annamalai Senthilkumar (G44627522)</div>
+        </div>
+      </div>
+
+      <!-- Footer links -->
+      <div class="flex flex-col gap-20 pt-80">
+        <a href="https://hexdocs.pm/phoenix/overview.html" class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80 text-center">
+          Get Started <span aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 ml-64 px-4 py-20 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-2xl">
+      <.flash_group flash={@flash} />
+      <%= @inner_content %>
+    </div>
+  </main>
+</div>
